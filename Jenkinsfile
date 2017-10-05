@@ -27,12 +27,13 @@ node {
           workspaceUpdater: [$class: 'UpdateUpdater']])
 
         sh "rsync -a magento/* /var/lib/jenkins/workspace/Magento/"
+        sh "sudo git clone https://github.com/tschifftner/magento2-deployscripts.git"
 
         stage 'Tool Setup'
         sh "php -v"
         // Composer deps like deployer
         sh "composer.phar install"
-        sh "compose.phar update --verbose --no-ansi --no-interaction --prefer-source vendor/tschifftner/magento2-deployscripts/build.sh -f project.tar.gz -b 1"
+        sh "compose.phar update --verbose --no-ansi --no-interaction --prefer-source magento2-deployscripts/build.sh -f project.tar.gz -b 1"
         // Phing
         if (!fileExists('phing-latest.phar')) {
             sh "curl -sS -O https://www.phing.info/get/phing-latest.phar"
