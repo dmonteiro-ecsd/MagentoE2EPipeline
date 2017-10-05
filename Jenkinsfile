@@ -27,7 +27,7 @@ node {
           workspaceUpdater: [$class: 'UpdateUpdater']])
 
         sh "rsync -a magento/* /var/lib/jenkins/workspace/Magento/"
-        sh "sudo git clone https://github.com/tschifftner/magento2-deployscripts.git"
+        sh "git clone https://github.com/tschifftner/magento2-deployscripts.git"
 
         stage 'Tool Setup'
         sh "php -v"
