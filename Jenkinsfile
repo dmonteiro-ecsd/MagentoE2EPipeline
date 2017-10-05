@@ -43,7 +43,8 @@ node {
 
         sh 'mkdir artifacts'
 
-        sh 'BASEPACKAGE="artifacts/${FILENAME}"'
+        sh 'BASEPACKAGE="artifacts/project.tar.gz"'
+
         sh 'tar -vczf "${BASEPACKAGE}" \
             --exclude=./var/log \
             --exclude=./pub/media \
