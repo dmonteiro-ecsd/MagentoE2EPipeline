@@ -24,7 +24,7 @@ node {
         depthOption: 'infinity', 
         ignoreExternalsOption: true, 
         remote: 'http://51.140.79.215/svn/magento/']], 
-        workspaceUpdater: [$class: 'UpdateUpdater']])
+        workspaceUpdater: [$class: 'UpdateUpdater']]
 
         stage 'Tool Setup'
 
