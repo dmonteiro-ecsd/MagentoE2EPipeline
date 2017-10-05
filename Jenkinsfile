@@ -11,20 +11,20 @@ node {
     try {
 
         // Update Deployment
-        checkout [$class: 'SubversionSCM', 
-        additionalCredentials: [], 
-        excludedCommitMessages: '', 
-        excludedRegions: '', 
-        excludedRevprop: '', 
-        excludedUsers: '', 
-        filterChangelog: false, 
-        ignoreDirPropChanges: false, 
-        includedRegions: '', 
-        locations: [[credentialsId: '7ca189fa-9171-4478-a33e-46434f661049', 
-        depthOption: 'infinity', 
-        ignoreExternalsOption: true, 
-        remote: 'http://51.140.79.215/svn/magento/']], 
-        workspaceUpdater: [$class: 'CheckoutUpdater']]
+        checkout([$class: 'SubversionSCM', 
+          additionalCredentials: [], 
+          excludedCommitMessages: '', 
+          excludedRegions: '', 
+          excludedRevprop: '', 
+          excludedUsers: '', 
+          filterChangelog: false, 
+          ignoreDirPropChanges: false, 
+          includedRegions: '', 
+          locations: [[credentialsId: '7ca189fa-9171-4478-a33e-46434f661049', 
+                       depthOption: 'infinity', 
+                       ignoreExternalsOption: true,  
+                       remote: "http://51.140.79.215/svn/magento"]], 
+          workspaceUpdater: [$class: 'UpdateUpdater']])
 
         stage 'Tool Setup'
 
