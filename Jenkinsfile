@@ -27,6 +27,7 @@ node {
           workspaceUpdater: [$class: 'UpdateUpdater']])
 
         stage 'Tool Setup'
+        sh "cd magento"
         sh "php -v"
         // Composer deps like deployer
         sh "composer.phar install"
