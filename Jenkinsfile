@@ -39,7 +39,28 @@ node {
         sh "php -v"
         // Composer deps like deployer
         sh "composer.phar install"
-        sh "composer.phar update --verbose --no-ansi --no-interaction --prefer-source magento2-deployscripts/build.sh"
+        sh "composer.phar install --verbose --no-ansi --no-interaction --prefer-source"
+
+        sh "if [ ! -f 'pub/index.php' ] ; then echo "Could not find pub/index.php"; exit 1 ; fi"
+        sh 'if [ ! -d "artifacts/" ] ; then mkdir artifacts/ ; fi'
+
+        sh 'BASEPACKAGE="artifacts/${FILENAME}"'
+        sh 'tar -vczf "${BASEPACKAGE}" \
+            --exclude=./var/log \
+            --exclude=./pub/media \
+            --exclude=./artifacts \
+            --exclude=./tmp \
+            --exclude-from="config/tar_excludes.txt" . > $tmpfile || { echo "Creating archive failed"; exit 1; }'
+
+        sh 'EXTRAPACKAGE=${BASEPACKAGE/.tar.gz/.extra.tar.gz}'
+
+        sh 'tar -czf "${EXTRAPACKAGE}" \
+            --exclude=./var/log \
+            --exclude=./pub/media \
+            --exclude=./artifacts \
+            --exclude=./tmp \
+            --exclude-from="$tmpfile" .  || { echo "Creating extra archive failed"; exit 1; }'
+
         // Phing
         if (!fileExists('phing-latest.phar')) {
             sh "curl -sS -O https://www.phing.info/get/phing-latest.phar"
