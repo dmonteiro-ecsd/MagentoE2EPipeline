@@ -39,29 +39,6 @@ node {
         sh "php -v"
         // Composer deps like deployer
         sh "composer.phar install"
-        sh "composer.phar install --verbose --no-ansi --no-interaction --prefer-source"
-
-        sh 'mkdir artifacts'
-
-        sh 'BASEPACKAGE="artifacts/project.tar.gz"'
-
-        //sh 'tar -vczf "${BASEPACKAGE}" \
-        //    --exclude=./var/log \
-        //    --exclude=./pub/media \
-        //    --exclude=./artifacts \
-        //    --exclude=./tmp \
-        //    --exclude-from="config/tar_excludes.txt" . > $tmpfile'
-
-        sh 'tar -vczf "${BASEPACKAGE}"'
-
-        sh 'EXTRAPACKAGE=${BASEPACKAGE/.tar.gz/.extra.tar.gz}'
-
-        sh 'tar -czf "${EXTRAPACKAGE}" \
-            --exclude=./var/log \
-            --exclude=./pub/media \
-            --exclude=./artifacts \
-            --exclude=./tmp \
-            --exclude-from="$tmpfile" .'
 
         // Phing
         if (!fileExists('phing-latest.phar')) {
@@ -70,26 +47,35 @@ node {
         sh "phing -v"
         sh "printenv"
 
-        //stage 'Magento Setup'
-        //dir('shop') {
-        //    sh "phing jenkins:flush-all"
-        //    sh "phing jenkins:setup-project"
-        //    sh "phing jenkins:flush-all"
-        //}
+        stage 'Magento Setup'
+        if (!fileExists('shop')) {
+            sh "git clone https://github.com/magento/magento2 shop"
+        } else {
+            dir('shop') {
+                sh "git fetch origin"
+                sh "git checkout -f 2.2-develop"
+                sh "git reset --hard origin/2.2-develop"
+            }
+        }
+        dir('shop') {
+            sh "phing jenkins:flush-all"
+            sh "phing jenkins:setup-project"
+            sh "phing jenkins:flush-all"
+        }
 
-        //stage 'Asset Generation'
-        //if (GENERATE_ASSETS == 'true') {
-        //    sh "phing deploy:switch-to-production-mode"
-        //    sh "phing deploy:compile"
-        //    sh "phing deploy:static-content"
-        //    sh "bash bin/build_artifacts_compress.sh"
+        stage 'Asset Generation'
+        if (GENERATE_ASSETS == 'true') {
+            sh "phing deploy:switch-to-production-mode"
+            sh "phing deploy:compile"
+            sh "phing deploy:static-content"
+            sh "bash bin/build_artifacts_compress.sh"
 
-        //    archiveArtifacts 'config.tar.gz'
-        //    archiveArtifacts 'var_di.tar.gz'
-        //    archiveArtifacts 'var_generation.tar.gz'
-        //    archiveArtifacts 'pub_static.tar.gz'
-        //    archiveArtifacts 'shop.tar.gz'
-        //}
+            archiveArtifacts 'config.tar.gz'
+            archiveArtifacts 'var_di.tar.gz'
+            archiveArtifacts 'var_generation.tar.gz'
+            archiveArtifacts 'pub_static.tar.gz'
+            archiveArtifacts 'shop.tar.gz'
+        }
 
         stage 'Deployment'
         if (DEPLOY == 'true') {
