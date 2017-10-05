@@ -20,7 +20,7 @@ node {
         filterChangelog: false, 
         ignoreDirPropChanges: false, 
         includedRegions: '', 
-        locations: [[credentialsId: '51cd938b-8c02-4526-8a99-85fad44025a2', 
+        locations: [[credentialsId: '7ca189fa-9171-4478-a33e-46434f661049', 
         depthOption: 'infinity', 
         ignoreExternalsOption: true, 
         remote: 'http://51.140.79.215/svn/magento/']], 
@@ -45,7 +45,7 @@ node {
         }
 
         stage 'Asset Generation'
-        
+
         if (GENERATE_ASSETS == 'true') {
             sh "${phingCall} deploy:switch-to-production-mode"
             sh "${phingCall} deploy:compile"
