@@ -23,11 +23,10 @@ node {
           locations: [[credentialsId: '174efef8-909d-48a1-b6be-8324c7a720a0', 
                        depthOption: 'infinity', 
                        ignoreExternalsOption: true,  
-                       remote: "http://51.140.79.215/svn/magento"]], 
+                       remote: "http://51.140.79.215/svn/magento/"]], 
           workspaceUpdater: [$class: 'UpdateUpdater']])
 
         stage 'Tool Setup'
-        sh "cd magento"
         sh "php -v"
         // Composer deps like deployer
         sh "composer.phar install"
