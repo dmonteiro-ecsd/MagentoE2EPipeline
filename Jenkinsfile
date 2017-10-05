@@ -9,7 +9,11 @@ node {
     env.DEPLOY = true
 
     try {
-
+        //clean
+        stage ('Clean') {
+            deleteDir()
+        }
+        
         // Update Deployment
         checkout([$class: 'SubversionSCM', 
           additionalCredentials: [], 
