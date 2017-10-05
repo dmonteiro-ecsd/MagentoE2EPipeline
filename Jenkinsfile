@@ -45,12 +45,14 @@ node {
 
         sh 'BASEPACKAGE="artifacts/project.tar.gz"'
 
-        sh 'tar -vczf "${BASEPACKAGE}" \
-            --exclude=./var/log \
-            --exclude=./pub/media \
-            --exclude=./artifacts \
-            --exclude=./tmp \
-            --exclude-from="config/tar_excludes.txt" . > $tmpfile || { echo "Creating archive failed"; exit 1; }'
+        //sh 'tar -vczf "${BASEPACKAGE}" \
+        //    --exclude=./var/log \
+        //    --exclude=./pub/media \
+        //    --exclude=./artifacts \
+        //    --exclude=./tmp \
+        //    --exclude-from="config/tar_excludes.txt" . > $tmpfile'
+
+        sh 'tar -vczf "${BASEPACKAGE}"'
 
         sh 'EXTRAPACKAGE=${BASEPACKAGE/.tar.gz/.extra.tar.gz}'
 
@@ -59,7 +61,7 @@ node {
             --exclude=./pub/media \
             --exclude=./artifacts \
             --exclude=./tmp \
-            --exclude-from="$tmpfile" .  || { echo "Creating extra archive failed"; exit 1; }'
+            --exclude-from="$tmpfile" .'
 
         // Phing
         if (!fileExists('phing-latest.phar')) {
