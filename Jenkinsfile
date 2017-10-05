@@ -41,8 +41,7 @@ node {
         sh "composer.phar install"
         sh "composer.phar install --verbose --no-ansi --no-interaction --prefer-source"
 
-        sh "if [ ! -f 'pub/index.php' ] ; then echo "Could not find pub/index.php"; exit 1 ; fi"
-        sh 'if [ ! -d "artifacts/" ] ; then mkdir artifacts/ ; fi'
+        sh 'mkdir artifacts'
 
         sh 'BASEPACKAGE="artifacts/${FILENAME}"'
         sh 'tar -vczf "${BASEPACKAGE}" \
