@@ -27,7 +27,7 @@ node {
           workspaceUpdater: [$class: 'UpdateUpdater']])
 
         stage 'Tool Setup'
-        sh "${phpBin} -v"
+        sh "${php} -v"
         // Composer deps like deployer
         sh "composer.phar install"
         // Phing
