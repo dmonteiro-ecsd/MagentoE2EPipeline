@@ -29,6 +29,7 @@ node {
         stage 'Tool Setup'
         sh "php -v"
         // Composer deps like deployer
+        sh "pwd"
         sh "composer.phar install"
         // Phing
         if (!fileExists('phing-latest.phar')) {
