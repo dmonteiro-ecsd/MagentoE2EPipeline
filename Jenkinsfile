@@ -20,7 +20,7 @@ node {
           filterChangelog: false, 
           ignoreDirPropChanges: false, 
           includedRegions: '', 
-          locations: [[credentialsId: '7ca189fa-9171-4478-a33e-46434f661049', 
+          locations: [[credentialsId: '174efef8-909d-48a1-b6be-8324c7a720a0', 
                        depthOption: 'infinity', 
                        ignoreExternalsOption: true,  
                        remote: "http://51.140.79.215/svn/magento"]], 
