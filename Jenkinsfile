@@ -27,8 +27,9 @@ node {
           workspaceUpdater: [$class: 'UpdateUpdater']])
 
         sh "rsync -a magento/* /var/lib/jenkins/workspace/Magento/"
-        sh "git clone https://github.com/tschifftner/magento2-deployscripts.git"
-
+        if (!DirExists('magento2-deployscripts')) {
+            sh "git clone https://github.com/tschifftner/magento2-deployscripts.git"
+        }
         stage 'Tool Setup'
         sh "php -v"
         // Composer deps like deployer
