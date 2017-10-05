@@ -39,7 +39,7 @@ node {
         sh "php -v"
         // Composer deps like deployer
         sh "composer.phar install"
-        sh "composer.phar update --verbose --no-ansi --no-interaction --prefer-source magento2-deployscripts/build.sh -f project.tar.gz -b 1"
+        sh "composer.phar update --verbose --no-ansi --no-interaction --prefer-source magento2-deployscripts/build.sh"
         // Phing
         if (!fileExists('phing-latest.phar')) {
             sh "curl -sS -O https://www.phing.info/get/phing-latest.phar"
