@@ -25,8 +25,8 @@ node {
                        ignoreExternalsOption: true,  
                        remote: "http://51.140.79.215/svn/magento/"]], 
           workspaceUpdater: [$class: 'UpdateUpdater']])
-
-        sh "mv magento/* /var/lib/jenkins/workspace/Magento/"
+          
+        sh "rsync -a magento/* /var/lib/jenkins/workspace/Magento/"
 
         stage 'Tool Setup'
         sh "php -v"
