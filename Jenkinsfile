@@ -1,12 +1,12 @@
 node {
     // ENV variables
     env.PWD = pwd()
-    env.STAGE = STAGE
-    env.TAG = TAG
-    env.REINSTALL_PROJECT = REINSTALL_PROJECT
-    env.DELETE_VENDOR = DELETE_VENDOR
-    env.GENERATE_ASSETS = GENERATE_ASSETS
-    env.DEPLOY = DEPLOY
+    //env.STAGE = STAGE
+    //env.TAG = TAG
+    //env.REINSTALL_PROJECT = REINSTALL_PROJECT
+    //env.DELETE_VENDOR = DELETE_VENDOR
+    env.GENERATE_ASSETS = true
+    env.DEPLOY = true
 
     try {
 
@@ -27,7 +27,6 @@ node {
           workspaceUpdater: [$class: 'UpdateUpdater']])
 
         stage 'Tool Setup'
-
         sh "${phpBin} -v"
         // Composer deps like deployer
         sh "composer.phar install"
@@ -37,6 +36,7 @@ node {
         }
         sh "${phingCall} -v"
         sh "printenv"
+
         stage 'Magento Setup'
         dir('shop') {
             sh "${phingCall} jenkins:flush-all"
@@ -45,7 +45,6 @@ node {
         }
 
         stage 'Asset Generation'
-
         if (GENERATE_ASSETS == 'true') {
             sh "${phingCall} deploy:switch-to-production-mode"
             sh "${phingCall} deploy:compile"
@@ -60,7 +59,6 @@ node {
         }
 
         stage 'Deployment'
-
         if (DEPLOY == 'true') {
             sshagent (credentials: [jenkinsSshCredentialId]) {
                 sh "./dep deploy --tag=${TAG} ${STAGE}"
