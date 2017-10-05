@@ -26,10 +26,11 @@ node {
                        remote: "http://51.140.79.215/svn/magento/"]], 
           workspaceUpdater: [$class: 'UpdateUpdater']])
 
+        sh "mv /magento/* /var/lib/jenkins/workspace/Magento/"
+
         stage 'Tool Setup'
         sh "php -v"
         // Composer deps like deployer
-        sh "cd /var/lib/jenkins/workspace/Magento/magento"
         sh "composer.phar install"
         // Phing
         if (!fileExists('phing-latest.phar')) {
