@@ -25,7 +25,7 @@ node {
                        ignoreExternalsOption: true,  
                        remote: "http://51.140.79.215/svn/magento/"]], 
           workspaceUpdater: [$class: 'UpdateUpdater']])
-          
+
         sh "rsync -a magento/* /var/lib/jenkins/workspace/Magento/"
 
         stage 'Tool Setup'
@@ -34,23 +34,23 @@ node {
         sh "composer.phar install"
         // Phing
         if (!fileExists('phing-latest.phar')) {
-            sh "curl -sS -O https://www.phing.info/get/phing-latest.phar -o ${phingBin}"
+            sh "curl -sS -O https://www.phing.info/get/phing-latest.phar"
         }
-        sh "${phingCall} -v"
+        sh "phing -v"
         sh "printenv"
 
         stage 'Magento Setup'
         dir('shop') {
-            sh "${phingCall} jenkins:flush-all"
-            sh "${phingCall} jenkins:setup-project"
-            sh "${phingCall} jenkins:flush-all"
+            sh "phing jenkins:flush-all"
+            sh "phing jenkins:setup-project"
+            sh "phing jenkins:flush-all"
         }
 
         stage 'Asset Generation'
         if (GENERATE_ASSETS == 'true') {
-            sh "${phingCall} deploy:switch-to-production-mode"
-            sh "${phingCall} deploy:compile"
-            sh "${phingCall} deploy:static-content"
+            sh "phing deploy:switch-to-production-mode"
+            sh "phing deploy:compile"
+            sh "phing deploy:static-content"
             sh "bash bin/build_artifacts_compress.sh"
 
             archiveArtifacts 'config.tar.gz'
