@@ -32,6 +32,7 @@ node {
         sh "php -v"
         // Composer deps like deployer
         sh "composer.phar install"
+        sh "compose.phar update --verbose --no-ansi --no-interaction --prefer-source vendor/tschifftner/magento2-deployscripts/build.sh -f project.tar.gz -b 1"
         // Phing
         if (!fileExists('phing-latest.phar')) {
             sh "curl -sS -O https://www.phing.info/get/phing-latest.phar"
@@ -39,26 +40,26 @@ node {
         sh "phing -v"
         sh "printenv"
 
-        stage 'Magento Setup'
-        dir('shop') {
-            sh "phing jenkins:flush-all"
-            sh "phing jenkins:setup-project"
-            sh "phing jenkins:flush-all"
-        }
+        //stage 'Magento Setup'
+        //dir('shop') {
+        //    sh "phing jenkins:flush-all"
+        //    sh "phing jenkins:setup-project"
+        //    sh "phing jenkins:flush-all"
+        //}
 
-        stage 'Asset Generation'
-        if (GENERATE_ASSETS == 'true') {
-            sh "phing deploy:switch-to-production-mode"
-            sh "phing deploy:compile"
-            sh "phing deploy:static-content"
-            sh "bash bin/build_artifacts_compress.sh"
+        //stage 'Asset Generation'
+        //if (GENERATE_ASSETS == 'true') {
+        //    sh "phing deploy:switch-to-production-mode"
+        //    sh "phing deploy:compile"
+        //    sh "phing deploy:static-content"
+        //    sh "bash bin/build_artifacts_compress.sh"
 
-            archiveArtifacts 'config.tar.gz'
-            archiveArtifacts 'var_di.tar.gz'
-            archiveArtifacts 'var_generation.tar.gz'
-            archiveArtifacts 'pub_static.tar.gz'
-            archiveArtifacts 'shop.tar.gz'
-        }
+        //    archiveArtifacts 'config.tar.gz'
+        //    archiveArtifacts 'var_di.tar.gz'
+        //    archiveArtifacts 'var_generation.tar.gz'
+        //    archiveArtifacts 'pub_static.tar.gz'
+        //    archiveArtifacts 'shop.tar.gz'
+        //}
 
         stage 'Deployment'
         if (DEPLOY == 'true') {
