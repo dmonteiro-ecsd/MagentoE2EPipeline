@@ -26,7 +26,7 @@ node {
                        remote: "http://51.140.79.215/svn/magento/"]], 
           workspaceUpdater: [$class: 'UpdateUpdater']])
 
-        sh "mv /magento/* /var/lib/jenkins/workspace/Magento/"
+        sh "mv magento/* /var/lib/jenkins/workspace/Magento/"
 
         stage 'Tool Setup'
         sh "php -v"
