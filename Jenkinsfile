@@ -37,9 +37,7 @@ node {
 
         stage 'Tool Setup'
         sh "php -v"
-        sh "echo postfix postfix/mailname string hostname.com > debconf-set-selections"
-        sh "echo postfix postfix/main_mailer_type string Internet Site > debconf-set-selections"
-        sh "sudo apt-get install -y postfix"
+        sh "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y postfix"
         sh "sudo service postfix start"
         // Composer deps like deployer
         sh "composer.phar install"
