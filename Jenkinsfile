@@ -33,8 +33,6 @@ node {
 
         sh "rsync -a magento/* /var/lib/jenkins/workspace/Magento/"
 
-        sh "git clone https://github.com/tschifftner/magento2-deployscripts.git"
-
         stage 'Tool Setup'
         sh "php -v"
 
@@ -48,6 +46,7 @@ node {
         stage 'Magento Setup'
 
         sh "composer.phar install --no-interaction --prefer-dist"
+        sh "composer.phar update"
 
         sh "./vendor/bin/robo validate"
         sh "./vendor/bin/robo deploy:magento-setup master"
