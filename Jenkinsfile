@@ -48,6 +48,7 @@ node {
         sh "composer.phar install --no-interaction --prefer-dist"
         sh "composer.phar update"
 
+        sh "./vendor/bin/robo init"
         sh "./vendor/bin/robo validate"
         sh "./vendor/bin/robo deploy:magento-setup master"
         sh "./vendor/bin/robo deploy:artifacts-generate"
