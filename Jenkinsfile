@@ -48,19 +48,11 @@ node {
         sh "printenv"
 
         stage 'Magento Setup'
-        if (!fileExists('shop')) {
-            sh "git clone https://github.com/magento/magento2 shop"
-        } else {
-            dir('shop') {
-                sh "git fetch origin"
-                sh "git checkout -f 2.2-develop"
-                sh "git reset --hard origin/2.2-develop"
-            }
-        }
-        dir('shop') {
-            sh "phing jenkins:flush-all"
-            sh "phing jenkins:setup-project"
-            sh "phing jenkins:flush-all"
+            // before install script
+            sh "./dev/travis/before_install.sh"
+            sh "composer.phar install --no-interaction --prefer-dist"
+            //after install script
+            sh "./dev/travis/before_script.sh"
         }
 
         stage 'Asset Generation'
