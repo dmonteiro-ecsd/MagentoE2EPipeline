@@ -37,11 +37,6 @@ node {
 
         stage 'Tool Setup'
         sh "php -v"
-        sh "sudo rm /var/cache/debconf/*.dat" 
-        sh "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y postfix"
-        sh "sudo service postfix start"
-        // Composer deps like deployer
-        sh "composer.phar install"
 
         // Phing
         if (!fileExists('phing-latest.phar')) {
@@ -51,11 +46,13 @@ node {
         sh "printenv"
 
         stage 'Magento Setup'
-        // before install script
-        sh "./dev/travis/before_install.sh"
+
         sh "composer.phar install --no-interaction --prefer-dist"
-        //after install script
-        sh "./dev/travis/before_script.sh"
+
+        sh "./vendor/bin/robo validate"
+        sh "./vendor/bin/robo deploy:magento-setup master"
+        sh "./vendor/bin/robo deploy:artifacts-generate"
+
 
         stage 'Asset Generation'
         if (GENERATE_ASSETS == 'true') {
