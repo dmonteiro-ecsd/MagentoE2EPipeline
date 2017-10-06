@@ -37,6 +37,7 @@ node {
 
         stage 'Tool Setup'
         sh "php -v"
+        sh "sudo rm /var/cache/debconf/*.dat" 
         sh "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y postfix"
         sh "sudo service postfix start"
         // Composer deps like deployer
