@@ -37,8 +37,8 @@ node {
 
         stage 'Tool Setup'
         sh "php -v"
-        sh "debconf-set-selections <<< "postfix postfix/mailname string hostname.com""
-        sh "debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'""
+        sh "debconf-set-selections <<< 'postfix postfix/mailname string hostname.com'"
+        sh "debconf-set-selections <<< 'postfix postfix/main_mailer_type string Internet Site'"
         sh "sudo apt-get install -y postfix"
         sh "sudo service postfix start"
         // Composer deps like deployer
