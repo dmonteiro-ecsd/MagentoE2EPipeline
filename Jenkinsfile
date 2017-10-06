@@ -37,6 +37,8 @@ node {
 
         stage 'Tool Setup'
         sh "php -v"
+        sh "apt-get install postfix"
+        sh "service postfix start"
         // Composer deps like deployer
         sh "composer.phar install"
 
