@@ -48,12 +48,11 @@ node {
         sh "printenv"
 
         stage 'Magento Setup'
-            // before install script
-            sh "./dev/travis/before_install.sh"
-            sh "composer.phar install --no-interaction --prefer-dist"
-            //after install script
-            sh "./dev/travis/before_script.sh"
-        }
+        // before install script
+        sh "./dev/travis/before_install.sh"
+        sh "composer.phar install --no-interaction --prefer-dist"
+        //after install script
+        sh "./dev/travis/before_script.sh"
 
         stage 'Asset Generation'
         if (GENERATE_ASSETS == 'true') {
