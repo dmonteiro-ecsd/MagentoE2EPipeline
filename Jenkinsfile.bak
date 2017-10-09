@@ -31,7 +31,7 @@ node {
                        remote: "http://51.140.79.215/svn/magento/"]], 
           workspaceUpdater: [$class: 'UpdateUpdater']])
 
-        sh "rsync -a magento/* /var/lib/jenkins/workspace/Magento/shop"
+        sh "rsync -a magento/* /var/lib/jenkins/workspace/Magento/"
 
         stage 'Tool Setup'
         sh "php -v"
@@ -45,13 +45,14 @@ node {
 
         stage 'Magento Setup'
 
-        sh "composer install --no-interaction --prefer-dist"
+        sh "composer.phar install --no-interaction --prefer-dist"
+        sh "composer.phar update"
 
-        dir('shop') {
-            sh "phing jenkins:flush-all"
-            sh "phing jenkins:setup-project"
-            sh "phing jenkins:flush-all"
-        }
+        sh "./vendor/bin/robo init"
+        sh "./vendor/bin/robo validate"
+        sh "./vendor/bin/robo deploy:magento-setup master"
+        sh "./vendor/bin/robo deploy:artifacts-generate"
+
 
         stage 'Asset Generation'
         if (GENERATE_ASSETS == 'true') {
