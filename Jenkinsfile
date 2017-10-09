@@ -45,9 +45,8 @@ node {
 
         stage 'Magento Setup'
 
-        sh "composer install --no-interaction --prefer-dist"
-
         dir('shop') {
+            sh "composer install --no-interaction --prefer-dist"
             sh "phing jenkins:flush-all"
             sh "phing jenkins:setup-project"
             sh "phing jenkins:flush-all"
@@ -55,10 +54,12 @@ node {
 
         stage 'Asset Generation'
         if (GENERATE_ASSETS == 'true') {
-            sh "phing deploy:switch-to-production-mode"
-            sh "phing deploy:compile"
-            sh "phing deploy:static-content"
-            sh "bash bin/build_artifacts_compress.sh"
+            dir('shop') {
+                sh "phing deploy:switch-to-production-mode"
+                sh "phing deploy:compile"
+                sh "phing deploy:static-content"
+                sh "bash bin/build_artifacts_compress.sh"
+            }
 
             archiveArtifacts 'config.tar.gz'
             archiveArtifacts 'var_di.tar.gz'
