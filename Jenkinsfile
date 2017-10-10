@@ -47,6 +47,8 @@ node {
 
         sh 'composer install'
 
+        sh 'apt-get install docker.io'
+
         stage 'Asset Generation'
         if (GENERATE_ASSETS == 'true') {
             sh 'bin/magento module:enable --all --clear-static-content'
