@@ -49,8 +49,7 @@ node {
 
         stage 'Asset Generation'
         if (GENERATE_ASSETS == 'true') {
-            sh 'bin/magento module:enable --all'
-            sh 'bin/magento dev:tests:run all'
+            sh 'bin/magento module:enable --all --clear-static-content'
             sh 'bin/magento setup:di:compile'
             sh 'tar -czvf magento.tar.gz /var/lib/jenkins/workspace/Magento'
         }
