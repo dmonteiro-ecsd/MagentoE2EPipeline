@@ -31,7 +31,7 @@ node {
                        remote: "http://51.140.79.215/svn/magento/"]], 
           workspaceUpdater: [$class: 'UpdateUpdater']])
 
-        sh "rsync -a magento/* /var/lib/jenkins/workspace/Magento/shop"
+        sh "rsync -a magento/* /var/lib/jenkins/workspace/Magento"
 
         stage 'Tool Setup'
         sh "php -v"
@@ -45,27 +45,12 @@ node {
 
         stage 'Magento Setup'
 
-        dir('shop') {
-            sh "composer install --no-interaction --prefer-dist"
-            sh "phing jenkins:flush-all"
-            sh "phing jenkins:setup-project"
-            sh "phing jenkins:flush-all"
-        }
+        sh 'composer install'
 
         stage 'Asset Generation'
         if (GENERATE_ASSETS == 'true') {
-            dir('shop') {
-                sh "phing deploy:switch-to-production-mode"
-                sh "phing deploy:compile"
-                sh "phing deploy:static-content"
-                sh "bash bin/build_artifacts_compress.sh"
-            }
-
-            archiveArtifacts 'config.tar.gz'
-            archiveArtifacts 'var_di.tar.gz'
-            archiveArtifacts 'var_generation.tar.gz'
-            archiveArtifacts 'pub_static.tar.gz'
-            archiveArtifacts 'shop.tar.gz'
+            sh 'bin/magento setup:di:compile'
+            sh 'bin/magento setup:static-content:deploy -f'
         }
 
         stage 'Deployment'
