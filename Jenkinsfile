@@ -51,7 +51,7 @@ node {
         if (GENERATE_ASSETS == 'true') {
             sh 'bin/magento module:enable --all --clear-static-content'
             sh 'bin/magento setup:di:compile'
-            sh 'tar -czvf magento.tar.gz /var/lib/jenkins/workspace/Magento --exclude-vcs'
+            sh 'tar -czvf magento2.tar.gz /var/lib/jenkins/workspace/Magento --exclude-vcs'
         }
 
         stage 'Deployment'
@@ -59,7 +59,7 @@ node {
         //    sshagent (credentials: [jenkinsSshCredentialId]) {
         //        sh "./dep deploy --tag=${TAG} ${STAGE}"
         //    }
-        sh 'echo "finally everything is ok"'
+        sh 'echo finally everything is ok'
         }
 
     } catch (err) {
