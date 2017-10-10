@@ -51,7 +51,7 @@ node {
         if (GENERATE_ASSETS == 'true') {
             sh 'bin/magento module:enable --all --clear-static-content'
             sh 'bin/magento setup:di:compile'
-            sh 'tar -czvf magento2.tar.gz /var/lib/jenkins/workspace/Magento --exclude-vcs --exclude=".[^/]*" --exclude="*.log" --exclude="*log*" --exclude="*cache*"'
+            sh 'tar -czvf magento2.tar.gz /var/lib/jenkins/workspace/Magento --exclude-vcs --exclude=".[^/]*" --exclude="*.log" --exclude="*log*" --exclude="var/*" --exclude="vendor/*"'
         }
 
         stage 'Deployment'
