@@ -56,9 +56,10 @@ node {
 
         stage 'Deployment'
         if (DEPLOY == 'true') {
-            sshagent (credentials: [jenkinsSshCredentialId]) {
-                sh "./dep deploy --tag=${TAG} ${STAGE}"
-            }
+        //    sshagent (credentials: [jenkinsSshCredentialId]) {
+        //        sh "./dep deploy --tag=${TAG} ${STAGE}"
+        //    }
+        sh 'echo "finally everything is ok"'
         }
 
     } catch (err) {
