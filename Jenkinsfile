@@ -54,12 +54,11 @@ node {
             sh 'tar -cvf magento2.tar.gz /var/lib/jenkins/workspace/Magento'
         }
 
-        stage 'Deployment'
+        stage 'Dockerize'
         if (DEPLOY == 'true') {
-        //    sshagent (credentials: [jenkinsSshCredentialId]) {
-        //        sh "./dep deploy --tag=${TAG} ${STAGE}"
-        //    }
-        sh 'echo finally everything is ok'
+            sh 'docker build -t magento_docker .'
+            sh 'echo $(docker images)'
+            sh 'echo finally everything is ok'
         }
 
     } catch (err) {

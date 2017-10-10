@@ -7,7 +7,7 @@ RUN a2enmod rewrite
 ENV MAGENTO_VERSION 2.1.1
 
 RUN rm -rf /var/www/html/*
-RUN cd /tmp && curl https://codeload.github.com/magento/magento2/tar.gz/$MAGENTO_VERSION -o $MAGENTO_VERSION.tar.gz && tar xvf $MAGENTO_VERSION.tar.gz && mv magento2-$MAGENTO_VERSION/* magento2-$MAGENTO_VERSION/.htaccess /var/www/html
+RUN mv magento2.tar.gz /tmp && cd /tmp &&  && tar xvf magento2.tar.gz && mv magento2/* magento2/.htaccess /var/www/html
 
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
