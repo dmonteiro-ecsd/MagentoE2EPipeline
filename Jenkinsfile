@@ -53,7 +53,7 @@ node {
         if (GENERATE_ASSETS == 'true') {
             sh 'cd magento2 && bin/magento module:enable --all --clear-static-content'
             sh 'cd magento2 && bin/magento setup:di:compile'
-            sh 'cd magento2 && tar -cvf magento2.tar.gz /var/lib/jenkins/workspace/Magento'
+            sh 'cd magento2 && tar -cvf magento2.tar.gz .'
         }
 
         stage 'Dockerize'
