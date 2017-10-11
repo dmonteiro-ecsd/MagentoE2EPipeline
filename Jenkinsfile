@@ -32,7 +32,8 @@ node {
           workspaceUpdater: [$class: 'UpdateUpdater']])
 
         //sh "rsync -a magento2/* /var/lib/jenkins/workspace/Magento"
-        sh "cp -rRp /magento2/. /var/lib/jenkins/workspace/Magento/"
+        sh "shopt -s dotglob"
+        sh "cp -Rdfp magento2/* /var/lib/jenkins/workspace/Magento"
         sh "sudo rm -rf magento2"
 
         stage 'Tool Setup'
