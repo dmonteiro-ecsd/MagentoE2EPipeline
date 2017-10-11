@@ -10,7 +10,7 @@ node {
 
     try {
         //clean
-        //sh "chown -R jenkins:jenkins *"
+        sh "chown -R jenkins:jenkins *"
         stage ('Clean') {
             deleteDir()
         }
@@ -37,6 +37,7 @@ node {
         //sh "sudo rm -rf magento2"
 
         stage 'Tool Setup'
+        sh "cd magento2"
         sh "php -v"
 
         // Phing
@@ -47,10 +48,11 @@ node {
         sh "printenv"
 
         stage 'Magento Setup'
-
+        sh "cd magento2"
         sh 'composer install'
 
         stage 'Asset Generation'
+        sh "cd magento2"
         if (GENERATE_ASSETS == 'true') {
             sh 'bin/magento module:enable --all --clear-static-content'
             sh 'bin/magento setup:di:compile'
@@ -58,6 +60,7 @@ node {
         }
 
         stage 'Dockerize'
+        sh "cd magento2"
         if (DEPLOY == 'true') {
             sh 'sudo docker build -t magento_docker .'
             sh 'echo $(sudo docker images)'
