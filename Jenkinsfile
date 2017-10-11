@@ -33,11 +33,9 @@ node {
 
         //sh "rsync -a magento2/* /var/lib/jenkins/workspace/Magento"
         //sh "sudo cp -Rdfp magento2/* /var/lib/jenkins/workspace/Magento"
-        sh "cd magento2"
         //sh "sudo rm -rf magento2"
 
         stage 'Tool Setup'
-        sh "cd magento2"
         sh "php -v"
 
         // Phing
@@ -48,21 +46,20 @@ node {
         sh "printenv"
 
         stage 'Magento Setup'
-        sh "cd magento2"
-        sh 'composer install'
+        sh 'cd magento2 && composer install'
 
         stage 'Asset Generation'
-        sh "cd magento2"
+
         if (GENERATE_ASSETS == 'true') {
-            sh 'bin/magento module:enable --all --clear-static-content'
-            sh 'bin/magento setup:di:compile'
-            sh 'tar -cvf magento2.tar.gz /var/lib/jenkins/workspace/Magento'
+            sh 'cd magento2 && bin/magento module:enable --all --clear-static-content'
+            sh 'cd magento2 && bin/magento setup:di:compile'
+            sh 'cd magento2 && tar -cvf magento2.tar.gz /var/lib/jenkins/workspace/Magento'
         }
 
         stage 'Dockerize'
-        sh "cd magento2"
+  
         if (DEPLOY == 'true') {
-            sh 'sudo docker build -t magento_docker .'
+            sh 'cd magento2 && sudo docker build -t magento_docker .'
             sh 'echo $(sudo docker images)'
             sh 'echo finally everything is ok'
         }
