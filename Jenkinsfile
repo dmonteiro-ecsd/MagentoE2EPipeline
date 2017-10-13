@@ -74,7 +74,7 @@ node {
         stage 'Deployment kube'
 
         if (DEPLOY == 'true') {
-            kubectl run magento-app --image=dmonteiroecsd/magento_docker:latest --port=80
+            sh 'kubectl run magento-app --image=dmonteiroecsd/magento_docker:latest --port=80'
         }
 
     } catch (err) {
