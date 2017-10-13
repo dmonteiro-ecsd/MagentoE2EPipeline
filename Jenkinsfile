@@ -74,11 +74,11 @@ node {
         stage 'Deployment kube'
 
         if (DEPLOY == 'true') {
-            sh 'kubectl run magento-app --image=dmonteiroecsd/magento_docker:latest --port=80'
+            sh 'sudo kubectl run magento-app --image=dmonteiroecsd/magento_docker:latest'
         }
         
         logstashSend failBuild: false, maxLines: 1000
-        
+
     } catch (err) {
         currentBuild.result = 'FAILURE'
         throw err
