@@ -76,7 +76,9 @@ node {
         if (DEPLOY == 'true') {
             sh 'kubectl run magento-app --image=dmonteiroecsd/magento_docker:latest --port=80'
         }
-
+        
+        logstashSend failBuild: false, maxLines: 1000
+        
     } catch (err) {
         currentBuild.result = 'FAILURE'
         throw err
