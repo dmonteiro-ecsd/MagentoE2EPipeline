@@ -2,6 +2,7 @@ node {
     // ENV variables
     env.PWD = pwd()
     env.GENERATE_ASSETS = true
+    env.DOCKERIZE = true
     env.DEPLOY = true
     env.PUSH = true 
 
@@ -53,12 +54,9 @@ node {
 
         stage 'Dockerize'
   
-        if (DEPLOY == 'true') {
-            //sh 'cd magento2 && sudo docker build -t magento_docker .'
+        if (DOCKERIZE == 'true') {
             dir('magento2'){
                 app = docker.build("dmonteiroecsd/magento_docker")
-                sh 'echo $(sudo docker images)'
-                sh 'echo finally everything is ok'
             }
         }
 
@@ -71,6 +69,12 @@ node {
                     app.push("latest")
                 }
             }
+        }
+
+        stage 'Deployment kube'
+
+        if (DEPLOY == 'true') {
+            kubectl run magento-app --image=dmonteiroecsd/magento_docker:latest --port=80
         }
 
     } catch (err) {
