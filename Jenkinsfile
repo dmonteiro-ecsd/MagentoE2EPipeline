@@ -1,12 +1,9 @@
 node {
     // ENV variables
     env.PWD = pwd()
-    //env.STAGE = STAGE
-    //env.TAG = TAG
-    //env.REINSTALL_PROJECT = REINSTALL_PROJECT
-    //env.DELETE_VENDOR = DELETE_VENDOR
     env.GENERATE_ASSETS = true
     env.DEPLOY = true
+    env.PUSH = true 
 
     try {
         //clean
@@ -30,10 +27,6 @@ node {
                        ignoreExternalsOption: true,  
                        remote: "http://51.140.79.215/svn/magento2/"]], 
           workspaceUpdater: [$class: 'UpdateUpdater']])
-
-        //sh "rsync -a magento2/* /var/lib/jenkins/workspace/Magento"
-        //sh "sudo cp -Rdfp magento2/* /var/lib/jenkins/workspace/Magento"
-        //sh "sudo rm -rf magento2"
 
         stage 'Tool Setup'
         sh "php -v"
@@ -59,9 +52,19 @@ node {
         stage 'Dockerize'
   
         if (DEPLOY == 'true') {
-            sh 'cd magento2 && sudo docker build -t magento_docker .'
+            //sh 'cd magento2 && sudo docker build -t magento_docker .'
+            sh 'cd magento2'
+            app = docker.build("dmonteiroecsd/magento_docker")
             sh 'echo $(sudo docker images)'
             sh 'echo finally everything is ok'
+        }
+
+        stage 'Push Docker image'
+
+        if (PUSH == 'true') {
+            docker.withRegistry('https://registry.hub.docker.com', 'docker-credentials') {
+            app.push("${env.BUILD_NUMBER}")
+            app.push("latest")
         }
 
     } catch (err) {
