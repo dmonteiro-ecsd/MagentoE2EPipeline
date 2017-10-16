@@ -74,10 +74,14 @@ node {
         stage 'Deployment kube'
 
         if (DEPLOY == 'true') {
-            sh 'kubectl run magento-app --image=dmonteiroecsd/magento_docker:latest'
+            sh "kubectl run magento-app-${env.BUILD_NUMBER} --image=dmonteiroecsd/magento_docker:latest"
         }
         
-        logstashSend failBuild: false, maxLines: 1000
+        stage 'Update ELKSTACK'
+
+        if (LOGSUPDATE == 'true'){}
+            logstashSend failBuild: false, maxLines: 1000
+        }
 
     } catch (err) {
         currentBuild.result = 'FAILURE'
