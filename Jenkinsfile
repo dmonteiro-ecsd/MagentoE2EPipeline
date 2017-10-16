@@ -6,6 +6,7 @@ node {
     env.DEPLOY = true
     env.PUSH = true 
     env.LOGSUPDATE = true
+    env.KUBEDATA = ""
 
     try {
         //clean
@@ -53,6 +54,8 @@ node {
             }
         }
 
+        slackSend "Build ${env.BUILD_NUMBER} - code built with success"
+
         stage 'Dockerize'
   
         if (DOCKERIZE == 'true') {
@@ -72,6 +75,8 @@ node {
             }
         }
 
+        slackSend "Build ${env.BUILD_NUMBER} docker image pushed into dmonteiroecsd/magento_docker"
+
         stage 'Deployment kube'
 
         if (DEPLOY == 'true') {
@@ -80,13 +85,19 @@ node {
             sh "kubectl expose deployment magento-app-${env.BUILD_NUMBER} --type=LoadBalancer --name=magento-${env.BUILD_NUMBER} --port=80"
             sleep 300
             sh "kubectl get services magento-${env.BUILD_NUMBER}"
+            env.KUBEDATA = sh "kubectl get services magento-${env.BUILD_NUMBER}"
         }
+
+        slackSend "Build ${env.BUILD_NUMBER} - Kubernetes deployment success"
+        slackSend "${env.KUBEDATA}"
         
         stage 'Update ELKSTACK'
 
         if (LOGSUPDATE == 'true'){
             logstashSend failBuild: false, maxLines: 10000
         }
+
+        slackSend "ELKStack updated to the build ${env.BUILD_NUMBER}"
 
     } catch (err) {
         currentBuild.result = 'FAILURE'
