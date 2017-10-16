@@ -98,6 +98,11 @@ node {
 
         slackSend "ELKStack updated to the build ${env.BUILD_NUMBER}"
 
+        stage 'Clean docker images created'
+
+        sh "docker rmi -f dmonteiroecsd/magento_docker:latest"
+        sh "docker rmi -f registry.hub.docker.com/dmonteiroecsd/magento_docker:latest"
+
     } catch (err) {
         currentBuild.result = 'FAILURE'
         throw err
