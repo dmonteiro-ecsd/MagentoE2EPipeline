@@ -41,7 +41,10 @@ node {
         sh "printenv"
 
         stage 'Magento Setup'
-        sh 'cd magento2 && composer install'
+
+        dir('magento2'){
+            composer install
+        }
 
         stage 'Asset Generation'
 
@@ -83,12 +86,12 @@ node {
             sleep 300
             sh "kubectl expose deployment magento-app-${env.BUILD_NUMBER} --type=LoadBalancer --name=magento-${env.BUILD_NUMBER} --port=80"
             sleep 300
-            sh "kubectl get services magento-${env.BUILD_NUMBER}"
-            KUBEDATA = sh "echo $(kubectl get services magento-${env.BUILD_NUMBER}) | cut -d " " -f 10"
+            KUBEDATA = sh "kubectl get services magento-${env.BUILD_NUMBER}"
+            KUBEURL = sh "echo ${KUBEDATA} | cut -d " " -f 10 "
         }
 
         slackSend "Build ${env.BUILD_NUMBER} - Kubernetes deployment success"
-        slackSend "${KUBEDATA}"
+        slackSend "${KUBEURL}"
         
         stage 'Update ELKSTACK'
 
