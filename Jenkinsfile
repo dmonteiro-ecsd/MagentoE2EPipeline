@@ -5,6 +5,7 @@ node {
     env.DOCKERIZE = true
     env.DEPLOY = true
     env.PUSH = true 
+    env.LOGSUPDATE = true
 
     try {
         //clean
