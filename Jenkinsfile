@@ -6,7 +6,6 @@ node {
     env.DEPLOY = true
     env.PUSH = true 
     env.LOGSUPDATE = true
-    env.KUBEURL = ''
 
     try {
         //clean
@@ -84,12 +83,12 @@ node {
             sleep 300
             sh "kubectl expose deployment magento-app-${env.BUILD_NUMBER} --type=LoadBalancer --name=magento-${env.BUILD_NUMBER} --port=80"
             sleep 300
-            sh "KUBEDATA=$(kubectl get services magento-${env.BUILD_NUMBER})"
-            env.KUBEURL = sh "echo ${KUBEDATA} | cut -d " " -f 10 "
+            sh "kubectl get services magento-${env.BUILD_NUMBER}) > output"
+            def kubeurl=readFile('output').trim()
         }
 
         slackSend "Build ${env.BUILD_NUMBER} - Kubernetes deployment success"
-        slackSend "${env.KUBEURL}"
+        slackSend "${kubeurl}"
         
         stage 'Update ELKSTACK'
 
