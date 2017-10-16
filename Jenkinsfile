@@ -74,7 +74,7 @@ node {
         stage 'Deployment kube'
 
         if (DEPLOY == 'true') {
-            sh 'sudo su - dmonteiro && kubectl run magento-app --image=dmonteiroecsd/magento_docker:latest'
+            sh 'kubectl run magento-app --image=dmonteiroecsd/magento_docker:latest'
         }
         
         logstashSend failBuild: false, maxLines: 1000
