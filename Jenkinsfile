@@ -79,7 +79,7 @@ node {
         
         stage 'Update ELKSTACK'
 
-        if (LOGSUPDATE == 'true'){}
+        if (LOGSUPDATE == 'true'){
             logstashSend failBuild: false, maxLines: 1000
         }
 
