@@ -83,7 +83,7 @@ node {
             sleep 300
             sh "kubectl expose deployment magento-app-${env.BUILD_NUMBER} --type=LoadBalancer --name=magento-${env.BUILD_NUMBER} --port=80"
             sleep 300
-            sh "kubectl get services magento-${env.BUILD_NUMBER}) > output"
+            sh "kubectl get services magento-${env.BUILD_NUMBER} > output"
             def kubeurl=readFile('output').trim()
         }
 
