@@ -41,10 +41,7 @@ node {
         sh "printenv"
 
         stage 'Magento Setup'
-
-        dir('magento2'){
-            composer install
-        }
+        sh 'cd magento2 && composer install'
 
         stage 'Asset Generation'
 
