@@ -74,7 +74,7 @@ node {
             }
         }
 
-        slackSend "Build ${env.BUILD_NUMBER} docker image pushed into dmonteiroecsd/magento_docker"
+        slackSend "Build ${env.BUILD_NUMBER} - Docker image pushed into dmonteiroecsd/magento_docker"
 
         stage 'Deployment kube'
 
@@ -86,9 +86,8 @@ node {
             sh "kubectl get services magento-${env.BUILD_NUMBER} > output"
             def kubeurl=readFile('output').trim()
             slackSend "$kubeurl"
+            slackSend "Build ${env.BUILD_NUMBER} - Kubernetes updated"
         }
-
-        slackSend "Build ${env.BUILD_NUMBER} - Kubernetes deployment success"
         
         stage 'Update ELKSTACK'
 
@@ -96,7 +95,7 @@ node {
             logstashSend failBuild: false, maxLines: 10000
         }
 
-        slackSend "ELKStack updated to the build ${env.BUILD_NUMBER}"
+        slackSend "Build ${env.BUILD_NUMBER} - ELKStack updated"
 
         stage 'Clean docker images created'
 
