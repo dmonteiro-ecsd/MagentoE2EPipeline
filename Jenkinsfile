@@ -85,10 +85,10 @@ node {
             sleep 300
             sh "kubectl get services magento-${env.BUILD_NUMBER} > output"
             def kubeurl=readFile('output').trim()
+            slackSend "$kubeurl"
         }
 
         slackSend "Build ${env.BUILD_NUMBER} - Kubernetes deployment success"
-        slackSend "${kubeurl}"
         
         stage 'Update ELKSTACK'
 
